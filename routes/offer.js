@@ -40,12 +40,25 @@ router.post('/', function (req, res, next) {
 
 /* Delete an offer. */
 router.delete('/:id', function(req, res, next) {
-  res.send('Delete an offer')
+  //res.send('Delete an offer')
+  const { id } = req.params
+  knex('offer')
+    .del()
+    .where('id', id)
+    .then(result => res.json(result))
+
 })
 
 /* Update an offer. */
 router.patch('/:id', function(req, res, next) {
-  res.send('Update an offer')
+  //res.send('Update an offer')
+  const { id } = req.params
+  const { name } = req.body
+  knex('offer')
+    .update({ name: name })
+    .where('id', id)
+    .returning('id')
+    .then(result => res.json(result))
 })
 
 
