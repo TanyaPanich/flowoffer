@@ -12,12 +12,30 @@ router.get('/', function(req, res, next) {
 
 /* GET a single offer. */
 router.get('/:id', function(req, res, next) {
-  res.send('GET a single offer')
+  //res.send('GET a single offer')
+  const { id } = req.params
+  knex('offer')
+  .select('id', 'name')
+  .where('id', id)
+  .then(rows => {
+    if(rows.length > 0) {
+      res.json(rows)
+    } else {
+      res.sendStatus(404)
+    }
+  })
 })
 
 /* POST a new offer. */
-router.post('/', function(req, res, next) {
-  res.send('POST a new offer')
+router.post('/', function (req, res, next) {
+  const { name } = req.body
+
+  knex('offer')
+    .insert([
+      { name: name }
+    ])
+    .returning('id')
+    .then(result => res.json(result))
 })
 
 /* Delete an offer. */
